@@ -51,18 +51,17 @@ def gamma_expanded_img(img_array):
     # passar os pixels da escala 0-255 pra 0-1
     # avaliar o valor convertido e aplicar fórmula
     # se o valor convertido for <= 0.04045
-    #   val = val // 12.92
+    #   val = val / 12.92
     # se não
     #   val = ((val + 0.055) / 1.055)**2.4
-    # converter o valor modificado de volta para a escala 0-255
+    # converter o valor modificado para int e de volta para a escala 0-255
     # retornar uma imagem feita a partir dos novos pixels
 
-
-    aux = np.array(img_array / 255, dtype=np.uint8)
+    aux = np.array(img_array / 255, dtype=np.float16)
 
     aux = np.where(aux <= 0.04045, aux / 12.92, ((aux + 0.055)/1.055)**2.4)
-    res = np.multiply(aux, 255)
-    return Image.fromarray(res.astype(np.uint8)) # Não funciona :(
+    res = np.array(aux * 255, dtype=np.uint8)
+    return Image.fromarray(res)
 
 
 # @pace_exhibition
@@ -79,24 +78,25 @@ if __name__ == '__main__':
     url = 'https://unsplash.com/photos/boaDpmC-_Xo/download?ixid=MnwxMjA3fDB8MXxhbGx8MXx8fHx8fDJ8fDE2MzQ2ODI0MzQ&force=true&w=640'
     response = requests.get(url)
     image = Image.open(BytesIO(response.content)).convert()
-    image.show()
+    # image.show()
     img_arr = np.copy(image)
 
     # Average Channels gray scale
     img_avg_gray = avg_gray_scale_conversion(img_arr)
-    img_avg_gray.show()
+    # img_avg_gray.show()
 
     # Luminance Perception gray scale
     img_lp = luminance_perception_conversion(img_arr)
-    img_lp.show()
+    # img_lp.show()
 
     # LP Gamma Correction
     img_gc = gamma_corrected_img(np.copy(img_lp), gamma=2.2) # Escolher o gama desejado
-    img_gc.show()
+    # img_gc.show()
 
-    # LP Gamma Expansion - Não funciona ainda
-    # img_ge = gamma_expanded_img(np.copy(img_lp))
-    # img_ge.show()
+    # LP Gamma Expansion
+    img_ge = gamma_expanded_img(np.copy(img_lp))
+    img_ge.show()
 
     # Linear Aproximation gray scale
     img_la = linear_aproximated_img(img_arr)
+    img_la.show()
