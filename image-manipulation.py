@@ -93,9 +93,13 @@ if __name__ == '__main__':
     img_gc = gamma_corrected_img(np.copy(img_lp), gamma=2.2) # Escolher o gama desejado
     # img_gc.show()
 
+    # Original Image Gamma Expansion
+    img_ge = gamma_expanded_img(img_arr)
+    # img_ge.show()
+
     # LP Gamma Expansion
-    img_ge = gamma_expanded_img(np.copy(img_lp))
-    img_ge.show()
+    img_ge_lp = gamma_expanded_img(np.copy(img_lp))
+    img_ge_lp.show()
 
     # Linear Aproximation gray scale
     img_la = linear_aproximated_img(img_arr)
